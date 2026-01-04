@@ -8,7 +8,8 @@ Personalized stress monitoring with gender, menstrual cycle support, and individ
 پایش هوشمند و شخصی‌سازی‌شده استرس با پشتیبانی از جنسیت، چرخه قاعدگی زنان و signature فردی — مقایسه‌پذیر با Oura Ring، Ultrahuman و Samsung Galaxy Ring.
 
 ### 🚀 Live Demo
-[[Click here for interactive demo](LINK_WILL_BE_ADDED_AFTER_DEPLOY)](https://kivara-dnxjd2432wiutexwcu5ogr.streamlit.app/)  
+[[Click here for interactive demo]()]
+*****https://kivarademo-jxqc3mbkw2vrb6uggdve4r.streamlit.app/*****
 (دموی زنده)
 
 ### Key Features | ویژگی‌های کلیدی
