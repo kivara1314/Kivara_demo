@@ -1,7 +1,7 @@
 import streamlit as st
 import numpy as np
 import plotly.graph_objects as go
-from scipy.signal import find_peaks
+from scipy.signal import find_peaks, welch
 from dataclasses import dataclass
 
 # =========================================================
@@ -72,10 +72,13 @@ def compute_lf_hf(peaks):
     rr = np.diff(peaks) / FS
     rr -= np.mean(rr)  # حذف میانگین از RR intervals
     fs_rr = 1 / np.mean(rr)  # تنظیم نرخ نمونه‌برداری
-    f, pxx = welch(rr, fs=fs_rr, nperseg=min(256, len(rr)))  # انجام Welch روی RR intervals
-    lf = np.trapz(pxx[(f >= 0.04) & (f <= 0.15)])
-    hf = np.trapz(pxx[(f >= 0.15) & (f <= 0.4)])
-    return float(lf / hf) if hf > 1e-6 else 0.0  # اضافه کردن guard برای جلوگیری از مقادیر غیرمعتبر
+    try:
+        f, pxx = welch(rr, fs=fs_rr, nperseg=min(256, len(rr)))  # انجام Welch روی RR intervals
+        lf = np.trapz(pxx[(f >= 0.04) & (f <= 0.15)])
+        hf = np.trapz(pxx[(f >= 0.15) & (f <= 0.4)])
+        return float(lf / hf) if hf > 1e-6 else 0.0  # اضافه کردن guard برای جلوگیری از مقادیر غیرمعتبر
+    except Exception as e:
+        return 0.0  # اگر خطایی رخ دهد، مقدار پیش‌فرض ۰ برگشت داده می‌شود
 
 # =========================================================
 # ☆ FEMALE CYCLE ENGINE
