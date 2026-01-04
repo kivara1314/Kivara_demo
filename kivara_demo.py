@@ -60,22 +60,22 @@ def compute_hr(peaks):
     return 60 / np.mean(rr)
 
 def compute_rmssd(peaks):
-    if len(peaks) < 3:  # اگر تعداد پیک‌ها کم باشد، مقدار پیش‌فرض برمی‌گرداند
+    if len(peaks) < 3:
         return 0.0
     rr = np.diff(peaks) / FS
     diff_rr = np.diff(rr)
     return float(np.sqrt(np.mean(diff_rr**2)) * 1000)  # ms
 
 def compute_lf_hf(peaks):
-    if len(peaks) < 8:  # حداقل ۸ پیک برای جلوگیری از گمراه شدن سیستم
+    if len(peaks) < 8:  # حداقل ۸ پیک برای محاسبه
         return 0.0
     rr = np.diff(peaks) / FS
     rr -= np.mean(rr)  # حذف میانگین از RR intervals
     fs_rr = 1 / np.mean(rr)  # تنظیم نرخ نمونه‌برداری
     try:
         f, pxx = welch(rr, fs=fs_rr, nperseg=min(256, len(rr)))  # انجام Welch روی RR intervals
-        lf = np.trapz(pxx[(f >= 0.04) & (f <= 0.15)])
-        hf = np.trapz(pxx[(f >= 0.15) & (f <= 0.4)])
+        lf = np.trapz(pxx[(f >= 0.04) & (f <= 0.15)])  # LF band
+        hf = np.trapz(pxx[(f >= 0.15) & (f <= 0.4)])  # HF band
         return float(lf / hf) if hf > 1e-6 else 0.0  # اضافه کردن guard برای جلوگیری از مقادیر غیرمعتبر
     except Exception as e:
         return 0.0  # اگر خطایی رخ دهد، مقدار پیش‌فرض ۰ برگشت داده می‌شود
@@ -222,12 +222,15 @@ class KivaraAgent:
 st.set_page_config(page_title="KIVARA: Physiological AI Agent", page_icon="🌿", layout="wide")
 
 # User Inputs for Gender, Cycle Day, and Stress Level
-st.title("KIVARA: Physiological AI Agent Demo")
+st.title("🌿 KIVARA: Physiological AI Agent Demo 🚀")
 
-gender = st.selectbox("Select Gender", ["male", "female"])
+# Add Stickers to make UI engaging
+st.markdown("### Select your parameters to analyze your stress levels 🌱")
+
+gender = st.selectbox("Select Gender 🧑‍⚕️", ["male", "female"])
 cycle_day = st.slider("Cycle Day", 1, 28, 14) if gender == "female" else None
-stress_level = st.slider("Stress Level", 0.0, 1.0, 0.5)
-hr = st.slider("Heart Rate (HR)", 50, 150, 75)
+stress_level = st.slider("Stress Level 😨", 0.0, 1.0, 0.5)
+hr = st.slider("Heart Rate (HR) 💓", 50, 150, 75)
 
 # Simulate PPG Signal
 ppg, t = simulate_ppg(hr=hr, stress_level=stress_level)
@@ -238,26 +241,26 @@ agent = KivaraAgent(gender=gender, cycle_day=cycle_day if gender == "female" els
 # Analyze PPG and Display Results
 result = agent.analyze(ppg, circadian_hour=14)
 
-# Display Results
-st.subheader("Physiological Data Analysis")
+# Display Results with stickers
+st.subheader("Physiological Data Analysis 🧠🌿")
 
 # Show metrics
 col1, col2, col3 = st.columns(3)
-col1.metric("Heart Rate (HR)", f"{result['hr']} bpm")
-col2.metric("RMSSD", f"{result['rmssd']} ms")
-col3.metric("LF/HF", f"{result['lf_hf']}")
+col1.metric("Heart Rate (HR) 💓", f"{result['hr']} bpm")
+col2.metric("RMSSD 🧘‍♂️", f"{result['rmssd']} ms")
+col3.metric("LF/HF ⚖️", f"{result['lf_hf']}")
 
 # Show stress level and power mode
 col4, col5 = st.columns(2)
-col4.metric("Stress Level", f"{result['stress']:.2f}")
-col5.metric("Power Mode", result["power_mode"])
+col4.metric("Stress Level 🆘", f"{result['stress']:.2f}")
+col5.metric("Power Mode ⚡", result["power_mode"])
 
 # Device state
-st.write(f"Device State: {result['device_state']}")
+st.write(f"Device State: {result['device_state']} 🟢")
 
 # Plot PPG signal
-st.subheader("PPG Signal Visualization")
+st.subheader("PPG Signal Visualization 📊")
 fig = go.Figure()
-fig.add_trace(go.Scatter(x=t, y=ppg, mode='lines', name="PPG Signal"))
+fig.add_trace(go.Scatter(x=t, y=ppg, mode='lines', name="Simulated PPG Signal"))
 fig.update_layout(title="Simulated PPG Signal", xaxis_title="Time (seconds)", yaxis_title="Amplitude")
 st.plotly_chart(fig)
