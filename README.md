@@ -1,2 +1,18 @@
-# Kivara_demo
-KIVARA: A platform for analyzing physiological data and managing stress levels based on PPG signals.
+# 🌿 KIVARA CORE
+
+**Intelligent Digital Twin AI for Stress Detection from PPG Signals**  
+**هوش مصنوعی دوقلوی دیجیتال برای تشخیص استرس از سیگنال PPG**
+
+Personalized stress monitoring with gender, menstrual cycle support, and individual signature — Comparable to Oura Ring, Ultrahuman, and Samsung Galaxy Ring.
+
+پایش هوشمند و شخصی‌سازی‌شده استرس با پشتیبانی از جنسیت، چرخه قاعدگی زنان و signature فردی — مقایسه‌پذیر با Oura Ring، Ultrahuman و Samsung Galaxy Ring.
+
+### 🚀 Live Demo
+[[Click here for interactive demo](LINK_WILL_BE_ADDED_AFTER_DEPLOY)](https://kivara-dnxjd2432wiutexwcu5ogr.streamlit.app/)  
+(دموی زنده)
+
+### Key Features | ویژگی‌های کلیدی
+- Realistic PPG simulation with motion noise  
+  شبیه‌سازی واقع‌گرایانه PPG با نویز حرکتی
+- Advanced HRV analysis (RMSSD, LF/HF)  
+
