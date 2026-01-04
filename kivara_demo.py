@@ -67,18 +67,21 @@ def compute_rmssd(peaks):
     return float(np.sqrt(np.mean(diff_rr**2)) * 1000)  # ms
 
 def compute_lf_hf(peaks):
-    if len(peaks) < 8:  # حداقل ۸ پیک برای محاسبه
-        return 0.0
+    # بررسی تعداد پیک‌ها و RR intervals
+    if len(peaks) < 8:
+        return 0.0  # تعداد پیک‌ها کافی نیست
+
     rr = np.diff(peaks) / FS
     rr -= np.mean(rr)  # حذف میانگین از RR intervals
     fs_rr = 1 / np.mean(rr)  # تنظیم نرخ نمونه‌برداری
     try:
-        f, pxx = welch(rr, fs=fs_rr, nperseg=min(256, len(rr)))  # انجام Welch روی RR intervals
+        # انجام Welch روی RR intervals برای محاسبه LF/HF
+        f, pxx = welch(rr, fs=fs_rr, nperseg=min(256, len(rr)))
         lf = np.trapz(pxx[(f >= 0.04) & (f <= 0.15)])  # LF band
         hf = np.trapz(pxx[(f >= 0.15) & (f <= 0.4)])  # HF band
-        return float(lf / hf) if hf > 1e-6 else 0.0  # اضافه کردن guard برای جلوگیری از مقادیر غیرمعتبر
+        return float(lf / hf) if hf > 1e-6 else 0.0  # اگر HF کمتر از مقدار آستانه باشد، مقدار 0 برمی‌گرداند
     except Exception as e:
-        return 0.0  # اگر خطایی رخ دهد، مقدار پیش‌فرض ۰ برگشت داده می‌شود
+        return 0.0  # در صورت بروز خطا، مقدار پیش‌فرض 0 برگشت داده می‌شود
 
 # =========================================================
 # ☆ FEMALE CYCLE ENGINE
